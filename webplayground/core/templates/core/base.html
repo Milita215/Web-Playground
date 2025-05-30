@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+
+
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}{% endblock %}</title>
@@ -28,15 +31,42 @@
                 <a class="nav-link" href="{% url 'home' %}">Inicio</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'sample' %}">Página</a>
+                <a class="nav-link" href="{% url 'pages:pages' %}">Páginas</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'profiles:list' %}">Perfiles</a>
+             </li>
+
             </ul>
             <ul class="navbar-nav">
+              {% if not request.user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Acceder</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signup' %}">Registro</a>
+                </li>
+              {% else %}
               <li class="nav-item">
-                <a class="nav-link" href="/admin/">
-                  {% if request.user.is_staff %}Admin{% else %}Acceder{% endif %}
-                </a>
+              
+              <li class="nav-item">
+                 <a href="{% url 'messenger:list' %}" class="navbar-button-style">Mensajes</a>
+                </li>
               </li>
+              <li class="nav-item">
+                <form id='profile-form' method="post" action="{% url 'profile' %}">
+                  {% csrf_token %}
+                  <button type="submit">Perfil</button>
+                </form>
+              </li>
+               <li class="nav-item">
+                <form id='logout-form' method="post" action="{% url 'logout' %}">
+                  {% csrf_token %}
+                  <button type="submit">Salir</button>
+                </form>
+              </li>
+              {% endif %}
+              
             </ul>
           </div>
         </div>
